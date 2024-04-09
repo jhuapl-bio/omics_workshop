@@ -74,15 +74,10 @@ If you use x86 architecture processors for Mac, you can skip this step. Otherwis
 2. Type (you can copy this command)
 
 ```
-CONDA_SUBDIR=osx-64 conda create -y -n omics_workshop python   
-conda activate omics_workshop
-python -c "import platform;print(platform.machine())"
-conda config --env --set subdir osx-64  
+export CONDA_SUBDIR=osx-64
 ```
 
-Make sure that whenever you want to run x86 commands i.e. commands that can ONLY run within an x86 environment you must run `conda activate omics_workshop` (or whatever env name of choice you want) or it won't work. Be aware that this environment will only be used for the tutorial portions of the workshop for Mac M1/2 chips only!
-
-Now, move onto the next step, skipping the first step. 
+You only need to run this if you have a Mac M1/2 and before you run the following installation step (Packages).
 
 Resources:
 
@@ -91,10 +86,11 @@ Resources:
 #### Packages
 
 ```
-conda create -y -n omics_workshop python
+conda create -y -n omics_workshop bowtie2 minimap2 kraken2 krona fastqc samtools bcftools python
 conda activate omics_workshop
-conda install -y -c bioconda kraken2 minimap2 bowtie2 fastqc samtools bcftools
 ```
+
+Congratulations, you've completed the required installation steps for running things from the command line
 
 ## Alignment
 
