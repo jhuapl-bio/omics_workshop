@@ -29,22 +29,22 @@ Otherwise, if you want to view things through the File Explorer you can do so by
 
 On the left-hand side, you should see the Linux logo in the quick search, near the bottom. Open Windows Explorer (Folder icon) on your Windows 10/11 machine first.
 
-<img src="./imgs/accessingLinuxFS1.PNG"  width="60%" height="30%">
+<img src="./imgs/accessingLinuxFS1.PNG"   >
 
 Make sure to select the Distro name. In my case (and yours) it is likely `Ubuntu`
-<img src="./imgs/accessingLinuxFS2.PNG"  width="60%" height="30%">
+<img src="./imgs/accessingLinuxFS2.PNG"   >
 
 Select `/home/`
 
-<img src="./imgs/accessingLinuxFS3.PNG"  width="60%" height="30%">
+<img src="./imgs/accessingLinuxFS3.PNG"   >
 
 Select the username. There is likely only a single directory within here. In my case, it is merribb1
 
-<img src="./imgs/accessingLinuxFS4.PNG"  width="60%" height="30%">
+<img src="./imgs/accessingLinuxFS4.PNG"   >
 
 You're now in the `$HOME` of your WSL2 terminal! feel free to browse around. We will access this this way when doing TaxTriage (see further down)
 
-<img src="./imgs/accessingLinuxFS5.PNG"  width="60%" height="30%">
+<img src="./imgs/accessingLinuxFS5.PNG"   >
 
 #### All Platforms
 
