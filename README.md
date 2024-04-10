@@ -286,12 +286,74 @@ Remember these parameters for tar. They aren't important to kraken2 but are usef
 
 
 ```
+kraken2 --report metagenomics/miseq.k2.report --out metagenomics/miseq.k2.out --db databases/test_metagenome fastq/miseq_reads_R1.fastq.gz fastq/miseq_reads_R2.fastq.gz
+```
 
-
-kraken2 --report metagenomics/ill.k2.report --out metagenomics/ill.k2.out --db databases/test_metagenome fastq/miseq_reads_R1.fastq.gz fastq/miseq_reads_R2.fastq.gz
+You will see output like 
 
 ```
 
-This will make a kraken2 report and outfile in the `metagenomics` directory
+Loading database information... done.
+78014 sequences (21.72 Mbp) processed in 1.766s (2650.3 Kseq/m, 737.94 Mbp/m).
+  77724 sequences classified (99.63%)
+  290 sequences unclassified (0.37%)
+```
 
+This will make a kraken2 report and outfile in the `metagenomics` directory. Let's view the report file with `cat` like so
+
+```
+cat metagenomics/miseq.k2.report 
+```
+
+Which will have output like
+
+```
+ 6.46  5040    5040    U       0       unclassified
+ 93.54  72974   0       R       1       root
+ 93.34  72822   0       R1      131567    cellular organisms
+ 93.34  72822   2       D       2           Bacteria
+ 64.00  49926   0       P       1224          Pseudomonadota
+ 53.67  41871   1       C       1236            Gammaproteobacteria
+ 53.36  41631   0       O       72274             Pseudomonadales
+ 53.36  41631   0       F       135621              Pseudomonadaceae
+ 53.36  41631   0       G       286                   Pseudomonas
+ 53.36  41631   0       G1      136841                  Pseudomonas aeruginosa group
+ 53.36  41631   0       S       287                       Pseudomonas aeruginosa
+ 53.36  41631   41631   S1      1279007                     Pseudomonas aeruginosa PA1
+...
+ 14.34  11185   11185   S1      93061                       Staphylococcus aureus subsp. aureus NCTC 8325
+...
+  0.15  114     114     S3      99287                         Salmonella enterica subsp. enterica serovar Typhimurium str. LT2
+...
+  0.12  95      95      S2      511145                      Escherichia coli str. K-12 substr. MG1655
+
+...
+ 12.38  9655    9655    S2      224308                          Bacillus subtilis subsp. subtilis str. 168
+...
+...
+  0.01  7       7       S       1613                      Limosilactobacillus fermentum
+ ...
+  0.19  152     152     S2      12814                           Respiratory syncytial virus
+```
+
+Notice the columns which are unanmed. I've truncated much of the output for readability. The columns are:
+
+1. Percentage of fragments covered by the clade rooted at this taxon
+2. Number of fragments covered by the clade rooted at this taxon
+3. Number of fragments assigned directly to this taxon
+4. A rank code, indicating (U)nclassified, (R)oot, (D)omain, (K)ingdom,
+   (P)hylum, (C)lass, (O)rder, (F)amily, (G)enus, or (S)pecies.
+   Taxa that are not at any of these 10 ranks have a rank code that is
+   formed by using the rank code of the closest ancestor rank with
+   a number indicating the distance from that rank.  E.g., "G2" is a
+   rank code indicating a taxon is between genus and species and the
+   grandparent taxon is at the genus rank.
+5. NCBI taxonomic ID number
+6. Indented scientific name
+
+
+
+See [docs](https://github.com/DerrickWood/kraken2/blob/master/docs/MANUAL.markdown) for more detailed information on kraken2
+
+Lastly, do you notice any organisms missing from the alignment coverage stats?
 
