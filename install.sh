@@ -20,7 +20,7 @@ echo "Please close and reopen your terminal, or run 'source ~/.bashrc', then rer
 # Check if the omics_workshop environment exists
 if conda env list | grep -q 'omics_workshop'; then
     echo "Removing existing 'omics_workshop' environment..."
-    conda env remove -n omics_workshop
+    conda env remove -y -n omics_workshop
 fi
 
 
