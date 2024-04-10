@@ -105,8 +105,9 @@ Expected Runtime: 2 minutes
 ```
 
 REFERENCE=references/test.fasta.gz
-mkdir -p alignment/test_indices
-bowtie2-build $REFERENCE alignment/test_indices
+rm -r alignment/test_indices
+mkdir -p alignment/test_indices/
+bowtie2-build $REFERENCE alignment/test_indices/test_indices
 
 ```
 
@@ -119,7 +120,7 @@ Let us make sure we assign some environment variables for readability. This is n
 
 ```
 
-INDEX=alignment/test_indices
+INDEX=alignment/test_indices/test_indices
 READS1=fastq/ill_R1.fastq.gz
 READS2=fastq/ill_R2.fastq.gz
 
