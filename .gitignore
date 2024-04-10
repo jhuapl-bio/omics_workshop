@@ -6,6 +6,9 @@ references/test.fasta
 alignment/test_indices
 alignment
 .DS_Store
+metagenomics
+databases/test_metagenome
+
 
 
 ### JupyterNotebooks ###
