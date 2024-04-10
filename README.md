@@ -121,15 +121,16 @@ Let us make sure we assign some environment variables for readability. This is n
 ```
 
 INDEX=alignment/test_indices/test_indices
-READS1=fastq/ill_R1.fastq.gz
-READS2=fastq/ill_R2.fastq.gz
+READS1=fastq/miseq_reads_R1.fastq.gz
+READS2=fastq/miseq_reads_R2.fastq.gz
+
 
 
 bowtie2 \
     -x $INDEX \
     -1 $READS1 -2 $READS2 \
     2> shortreads.bowtie2.log \
-    | samtools sort | samtools view -b -h -o alignment/ill.bam
+    | samtools sort | samtools view -b -h -o alignment/miseq.bam
 
 ```
 
@@ -174,17 +175,42 @@ Expected command lint stdout/stderr
 ## Get general Coverage Stats for your alignments
 
 ```
-samtools coverage alignment/ill.bam
+samtools coverage alignment/miseq.bam
 ```
 
 Expected output 
 
 ```
 #rname  startpos        endpos  numreads        covbases        coverage        meandepth       meanbaseq       meanmapq
-Metabacillus_litoralis_strain_NCTR108   1       5327848 1       1108    0.0207964       0.000207964     13.9    40
-Staphylococcus_aureus_strain_NAS_AN_115 1       2734925 22      16638   0.608353        0.00629158      14      0.0909
-Bacillus_subtilis_subsp._subtilis_str_168       1       4215606 873     1801622 42.737  0.555766        14      59.4
-Escherichia_coli_str._K-12_substr._MG1655       1       4641652 134     795631  17.1411 0.189285        14      60
+Respiratory_syncytial_virus_A   1       15191   152     14824   97.5841 3.01178 32.5    42
+Staphylococcus_aureus_subsp._aureus_NCTC_8325   1       2821361 11173   1859975 65.9247 1.07963 33.2    41
+Neisseria_gonorrhoeae_strain_TUM19854   1       2167602 8046    1400912 64.6296 1.04874 33      39.4
+Pseudomonas_aeruginosa_PAO1     1       6264404 41623   5425654 86.6109 1.99994 32.6    41.4
+Bacillus_subtilis_subsp._subtilis_str._168      1       4215606 9682    2098744 49.7851 0.690362        32.6    41.3
+Listeria_monocytogenes_EGD-e    1       2944528 1       124     0.0042112       4.2112e-05      40      0
+Salmonella_enterica_subsp._enterica_serovar_Typhimurium_str_LT2 1       4857450 47      5659    0.116501        0.00120866      40     2.57
+Escherichia_coli_str._K-12_substr_MG1655        1       4641652 36      4726    0.101817        0.00104165      39.2    7.36
+Limosilactobacillus_fermentum_strain_EFEL6800   1       2068538 10      1128    0.0545313       0.000602841     40      0.1
+```
+
+See discussion for meaning of each column for coverage.
+
+Now, do the same for the minimap2 coverage information
+
+```
+samtools coverage alignment/ont.bam
+
+#rname  startpos        endpos  numreads        covbases        coverage        meandepth       meanbaseq       meanmapq
+Staphylococcus_aureus_subsp._aureus_NCTC_8325   1       2821361 907     1629969 57.7724 0.85742 14      59.5
+Pseudomonas_aeruginosa_PAO1     1       6264404 8       117273  1.87205 0.0187205       14      60
+Bacillus_subtilis_subsp._subtilis_str._168      1       4215606 874     1801738 42.7397 0.555923        14      59.4
+Listeria_monocytogenes_EGD-e    1       2944528 211     897089  30.4663 0.370027        14      58.4
+Salmonella_enterica_subsp._enterica_serovar_Typhimurium_str_LT2 1       4857450 42      342289  7.04668 0.0738289       14      60
+Escherichia_coli_str._K-12_substr_MG1655        1       4641652 134     795631  17.1411 0.189285        14      60
+Limosilactobacillus_fermentum_strain_EFEL6800   1       2068538 97      514396  24.8676 0.28864 14      60
+Limosilactobacillus_fermentum_strain_EFEL6800_plasmid_pLBF347   1       34793   121     34793   100     16.5382 14      59.5
+Saccharomyces_cerevisiae_S288C_chromosome_I     1       230218  47      84078   36.521  0.540918        14      55.3
+
 ```
 
 
@@ -200,7 +226,7 @@ minimap2 \
      -x map-ont \
     $REFERENCE \
     $READS \
-    -L -a | samtools sort | samtools view -b -h -o alignment/ont.bam -q 60  
+    -L -a | samtools sort | samtools view -b -h -o alignment/ont.q60.bam -q 60  && samtools coverage alignment/ont.q60.bam
 ```
 
 Expected stdout/stderr
@@ -218,7 +244,54 @@ Expected stdout/stderr
 [M::main] Real time: 3.069 sec; CPU: 6.940 sec; Peak RSS: 0.736 GB
 ```
 
+```
+#rname  startpos        endpos  numreads        covbases        coverage        meandepth       meanbaseq       meanmapq
+Staphylococcus_aureus_subsp._aureus_NCTC_8325   1       2821361 897     1623800 57.5538 0.852678        14      60
+Pseudomonas_aeruginosa_PAO1     1       6264404 8       117273  1.87205 0.0187205       14      60
+Bacillus_subtilis_subsp._subtilis_str._168      1       4215606 861     1788953 42.4364 0.548462        14      60
+Listeria_monocytogenes_EGD-e    1       2944528 201     878599  29.8384 0.361071        14      60
+Salmonella_enterica_subsp._enterica_serovar_Typhimurium_str_LT2 1       4857450 42      342289  7.04668 0.0738289       14      60
+Escherichia_coli_str._K-12_substr_MG1655        1       4641652 134     795631  17.1411 0.189285        14      60
+Limosilactobacillus_fermentum_strain_EFEL6800   1       2068538 97      514396  24.8676 0.28864 14      60
+Limosilactobacillus_fermentum_strain_EFEL6800_plasmid_pLBF347   1       34793   120     34793   100     16.5099 14      60
+Saccharomyces_cerevisiae_S288C_chromosome_I     1       230218  42      84076   36.5202 0.535249        14      60
+
+```
+
+Notice that only the reads with Q60 mapq have been filtered down. The number of covbases should be lower as well as meandepth and coverage. 
 
 
+## Kraken2 - Metagenomics for agnostic classifications)
+
+### Defining our command
+
+
+Type:
+
+First, let's stage everything by decompressing our database tarball with tar and also make a directory to place our output files
+
+```
+mkdir -p metagenomics
+tar -k -C databases -xvzf databases/test_metagenome.tar.gz
+```
+
+Remember these parameters for tar. They aren't important to kraken2 but are useful when working with decompressing a tarball
+
+- `-C` Change to directory to perform decompressing. This is where the files will live after decompression has taken place
+- `-k` Keep the original tarball. Omit this in most cases if you dont want to store as much as soon as you've decompressed.
+- `-x` Extract - used for decompressing
+- `-v` verbose output. otherwise, it is quiet on the stdout/stderr
+- `-z` The tar is also compressed because it ends with `.gz`
+- `-f` Specify the filename of the tarball (compressed or otherwise)
+
+
+```
+
+
+kraken2 --report metagenomics/ill.k2.report --out metagenomics/ill.k2.out --db databases/test_metagenome fastq/miseq_reads_R1.fastq.gz fastq/miseq_reads_R2.fastq.gz
+
+```
+
+This will make a kraken2 report and outfile in the `metagenomics` directory
 
 
