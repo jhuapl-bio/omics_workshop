@@ -12,20 +12,53 @@ Make sure that WSL2 is installed. In most current iterations of Windows 10/11, t
 
 Prerequisites: None
 
-1. Open Windows Powershell and type `wsl --version`
+See detailed images for setting up WSL2 step-by-step
 
-If you have something appear you can skip this step, otherwise follow the instructions [here](https://docs.microsoft.com/en-us/windows/wsl/install-win10#step-4---download-the-linux-kernel-update-package)
+Make sure you open Powershell First
 
-2. `wsl --install -d ubuntu`
-3. Go Back to powershell and type: `wsl.exe --set-default-version 2`
+<img src="./imgs/AccessingPowershell1.PNG"   >
 
-You may need to restart your machine after installing
+1. Next, let's check if WSL2 is installed...
 
-:warning: please be aware that things in your `C:` drive will be referred to as `mnt/c/`. So, for instance if I want to put something in my `Documents` folder I would need to do `cp test.txt /mnt/c/Users/$USER/Documents/test.txt`. Make sure you select the right value of $USER in that path example. If you're unsure, simply check the username in Windows10 OR you can hit `tab` after `/mnt/c/Users/` and you should see things autopopulate`
 
-Otherwise, if you want to view things through the File Explorer you can do so by following these steps:
+<img src="./imgs/AccessingPowershell2.5.PNG"   >
 
-##### Viewing or adding to your WSL from Windows Explorer
+Type the above command to check if you have WSL2. IF you have output similar to this, then you have it installed already. Otherwise, follow the steps the install WSL2 on your system [here](https://learn.microsoft.com/en-us/windows/wsl/install-manual)
+
+If you can't get WSL2 to work, also try following some troubleshooting steps [here](https://basestackwebsite.readthedocs.io/en/latest/troubleshooting.html#virtualization-disabled-windows)
+
+
+If it is installed now we need to make sure that WSL2 is the default version with: 
+
+2. `wsl --set-default-version 2`
+
+<img src="./imgs/AccessingPowershell4.PNG"   >
+
+Next, type:
+
+3. `wsl --install -d ubuntu`
+
+<img src="./imgs/AccessingPowershell3.PNG"   >
+
+You should see a new window pop up with Ubuntu as a logo for the icon in the taskbar. If you don't please search for Ubuntu in your search bar and open it that way.
+
+<img src="./imgs/openingwsl.PNG"   >
+
+4. Next, you need to input your Username and Password for your session. You can set this to whatever you want or do the default values of:
+
+User: `omics_workshop`
+Password: `omics_workshop`
+
+<img src="./imgs/AccessingPowershell5.PNG"   >
+
+Once you've performed these functions, you now have a working Linux environment directly on your Windows 10/11 machine!!!
+
+
+##### Viewing or adding to your WSL2 directories from Windows Explorer
+
+Open Windows Explorer 
+
+<img src="./imgs/Windowsexplorer.PNG"   >
 
 On the left-hand side, you should see the Linux logo in the quick search, near the bottom. Open Windows Explorer (Folder icon) on your Windows 10/11 machine first.
 
@@ -38,13 +71,17 @@ Select `/home/`
 
 <img src="./imgs/accessingLinuxFS3.PNG"   >
 
-Select the username. There is likely only a single directory within here. In my case, it is merribb1
+Select the username. There is likely only a single directory within here. In my case, it is `omics_workshop`
 
 <img src="./imgs/accessingLinuxFS4.PNG"   >
 
 You're now in the `$HOME` of your WSL2 terminal! feel free to browse around. We will access this this way when doing TaxTriage (see further down)
 
 <img src="./imgs/accessingLinuxFS5.PNG"   >
+
+
+:warning: please be aware that things in your `C:` drive will be referred to as `mnt/c/`. So, for instance if I want to put something in my `Documents` folder I would need to do `cp test.txt /mnt/c/Users/$USER/Documents/test.txt`. Make sure you select the right value of $USER in that path example. If you're unsure, simply check the username in Windows10 OR you can hit `tab` after `/mnt/c/Users/` and you should see things autopopulate`
+
 
 #### All Platforms
 
@@ -86,7 +123,7 @@ Resources:
 #### Packages
 
 ```
-conda create -y -n omics_workshop bowtie2 minimap2 kraken2 krona fastqc samtools bcftools python
+conda create -y -n omics_workshop bowtie2 minimap2 kraken2 krona fastqc samtools bcftools git python
 conda activate omics_workshop
 ```
 
