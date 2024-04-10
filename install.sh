@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Check for Conda installation
-if  command -v conda &> /dev/null; then
+if  ! command -v conda; then
     echo "Conda not found. Installing Miniconda..."
     wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh
     bash ~/miniconda.sh -b -u -p ~/miniconda3
