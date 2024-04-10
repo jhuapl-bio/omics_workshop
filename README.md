@@ -6,6 +6,17 @@
 
 There should only be 1 requirement to install for Linux users and 2 for both Mac and Windows. 
 
+
+
+### Windows Only. Mac and Linux can skip
+
+Make sure you have the `install.bat file` and then `wsl.bat` to install all dependencies. If not, make sure to install the zip file or get it [here](https://github.com/jhuapl-bio/omics_workshop/raw/main/install.bat)
+
+Otherwise, for Mac and Linux machines, make sure to `git clone https://github.com/jhuapl-bio/omics_workshop` and run the `install.sh` script or get it and run it with `wget --no-check-certificate https://github.com/jhuapl-bio/omics_workshop/raw/main/install.bat -O install.sh && bash install.sh`
+
+
+If you need additional help, see [manual steps](manual_install.MD)
+
 ## Alignment
 
 ### Short (Illumina) Reads
