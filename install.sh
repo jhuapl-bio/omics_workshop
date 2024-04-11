@@ -1,17 +1,17 @@
 #!/bin/bash
 
 # Check for Conda installation
-if  ! command -v conda; then
+
+if  ! source ~/.bashrc && command -v conda; then
     echo "Conda not found. Installing Miniconda..."
-    wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh
-    bash ~/miniconda.sh -b -u -p ~/miniconda3
-    rm ~/miniconda.sh
-    echo "Initializing Miniconda..."
-    ~/miniconda3/bin/conda init bash
+    # wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh
+    # bash ~/miniconda.sh -b -u -p ~/miniconda3
+    # rm ~/miniconda.sh
+    # echo "Initializing Miniconda..."
+    # ~/miniconda3/bin/conda init bash
 else
     echo "Conda is already installed."
 fi
-
 
 unameOut="$(uname -s)"
 case "${unameOut}" in
@@ -26,13 +26,12 @@ source ~/miniconda3/etc/profile.d/conda.sh
 
 # Wait for the user to close and reopen their shell or source their bashrc
 echo "Please close and reopen your terminal, or run 'source ~/.bashrc', then rerun this script."
-
+conda env list
 # Check if the omics_workshop environment exists
-if conda env list | grep -q 'omics_workshop'; then
+if  conda env list | grep -q 'omics_workshop'; then
     echo "Removing existing 'omics_workshop' environment..."
     conda env remove -y -n omics_workshop
 fi
-
 
 echo "Creating 'omics_workshop' environment..."
 
@@ -51,7 +50,7 @@ git clone https://github.com/jhuapl-bio/omics_workshop ~/omics_workshop
 ## make sure we update Taxonomy for krona to work! Requires internet
 echo "Downloading taxonomy information. Requires internet connection. This will take some time...."
 # bash ktUpdateTaxonomy.sh
-mkdir -p  ~/omics_workshop/downloads/ \
+mkdir -p  ~/omics_workshop/downloads/ && conda activate omics_workshop \
     && wget https://github.com/jhuapl-bio/datasets/raw/main/databases/ncbi/taxonomy.tab.gz \
     -O ~/omics_workshop/downloads/taxonomy.tab.gz \
     && gzip -f -d ~/omics_workshop/downloads/taxonomy.tab.gz  && \
