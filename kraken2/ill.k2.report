@@ -1,0 +1,54 @@
+  0.37	290	290	U	0	unclassified
+ 99.63	77724	0	R	1	root
+ 99.63	77724	0	R1	131567	  cellular organisms
+ 99.63	77724	2	D	2	    Bacteria
+ 68.83	53700	9	P	1224	      Pseudomonadota
+ 57.27	44681	0	C	1236	        Gammaproteobacteria
+ 53.35	41624	0	O	72274	          Pseudomonadales
+ 53.35	41624	0	F	135621	            Pseudomonadaceae
+ 53.35	41624	0	G	286	              Pseudomonas
+ 53.35	41624	0	G1	136841	                Pseudomonas aeruginosa group
+ 53.35	41624	0	S	287	                  Pseudomonas aeruginosa
+ 53.35	41624	41624	S1	208964	                    Pseudomonas aeruginosa PAO1
+  3.92	3057	1	O	91347	          Enterobacterales
+  3.71	2894	7	F	543	            Enterobacteriaceae
+  3.70	2887	0	F1	2890311	              Klebsiella/Raoultella group
+  3.70	2887	0	G	570	                Klebsiella
+  3.70	2887	2887	S	573	                  Klebsiella pneumoniae
+  0.21	162	0	F	1903410	            Pectobacteriaceae
+  0.21	162	0	G	204037	              Dickeya
+  0.21	162	162	S	1778540	                Dickeya fangzhongdai
+ 11.55	9010	0	C	28216	        Betaproteobacteria
+ 10.30	8034	0	O	206351	          Neisseriales
+ 10.30	8034	0	F	481	            Neisseriaceae
+ 10.30	8034	0	G	482	              Neisseria
+ 10.30	8034	8034	S	485	                Neisseria gonorrhoeae
+  0.86	674	0	O	206389	          Rhodocyclales
+  0.86	674	0	F	2808923	            Fluviibacteraceae
+  0.86	674	0	G	2808942	              Fluviibacter
+  0.86	674	674	S	1751046	                Fluviibacter phosphoraccumulans
+  0.39	302	0	O	80840	          Burkholderiales
+  0.39	302	0	F	80864	            Comamonadaceae
+  0.39	302	0	G	238749	              Diaphorobacter
+  0.39	302	302	S	1715720	                Diaphorobacter ruginosibacter
+ 30.79	24022	0	D1	1783272	      Terrabacteria group
+ 30.79	24022	0	P	1239	        Bacillota
+ 30.79	24022	0	C	91061	          Bacilli
+ 29.42	22951	1	O	1385	            Bacillales
+ 14.99	11692	7	F	186817	              Bacillaceae
+ 12.38	9655	0	G	1386	                Bacillus
+ 12.38	9655	0	G1	653685	                  Bacillus subtilis group
+ 12.38	9655	0	S	1423	                    Bacillus subtilis
+ 12.38	9655	0	S1	135461	                      Bacillus subtilis subsp. subtilis
+ 12.38	9655	9655	S2	224308	                        Bacillus subtilis subsp. subtilis str. 168
+  2.60	2030	0	G	2675233	                Metabacillus
+  2.60	2030	2030	S	152268	                  Metabacillus litoralis
+ 14.43	11258	0	F	90964	              Staphylococcaceae
+ 14.43	11258	0	G	1279	                Staphylococcus
+ 14.43	11258	4988	S	1280	                  Staphylococcus aureus
+  8.04	6270	6270	S1	93061	                    Staphylococcus aureus subsp. aureus NCTC 8325
+  1.37	1071	0	O	186826	            Lactobacillales
+  1.37	1071	0	F	33958	              Lactobacillaceae
+  1.37	1071	0	G	1253	                Pediococcus
+  1.37	1071	0	G1	1670797	                  Pediococcus acidilactici group
+  1.37	1071	1071	S	1254	                    Pediococcus acidilactici
