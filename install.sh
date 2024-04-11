@@ -4,11 +4,11 @@
 
 if  ! source ~/.bashrc && command -v conda; then
     echo "Conda not found. Installing Miniconda..."
-    # wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh
-    # bash ~/miniconda.sh -b -u -p ~/miniconda3
-    # rm ~/miniconda.sh
-    # echo "Initializing Miniconda..."
-    # ~/miniconda3/bin/conda init bash
+    wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh
+    bash ~/miniconda.sh -b -u -p ~/miniconda3
+    rm ~/miniconda.sh
+    echo "Initializing Miniconda..."
+    ~/miniconda3/bin/conda init bash
 else
     echo "Conda is already installed."
 fi
