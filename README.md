@@ -240,7 +240,7 @@ Remember these parameters for tar. They aren't important to kraken2 but are usef
 
 
 ```
-kraken2 --report metagenomics/miseq.k2.report --out metagenomics/miseq.k2.out --db databases/test_metagenome fastq/miseq_reads_R1.fastq.gz fastq/miseq_reads_R2.fastq.gz
+kraken2 --report metagenomics/miseq.k2.report  --paired --out metagenomics/miseq.k2.out --db databases/test_metagenome fastq/miseq_reads_R1.fastq.gz fastq/miseq_reads_R2.fastq.gz
 ```
 
 You will see output like 
@@ -306,6 +306,11 @@ Notice the columns which are unanmed. I've truncated much of the output for read
 6. Indented scientific name
 
 
+Let's now do the same for our ONT data
+
+```
+kraken2 --report metagenomics/ont.k2.report --out metagenomics/ont.k2.out --db databases/test_metagenome fastq/ont_reads.fastq.gz
+```
 
 See [docs](https://github.com/DerrickWood/kraken2/blob/master/docs/MANUAL.markdown) for more detailed information on kraken2
 
@@ -316,17 +321,31 @@ Lastly, do you notice any organisms missing from the alignment coverage stats?
 
 Make sure you've updated the taxonomy before you do this. This should've occurred when you installed everything with `install.bat` and `install.sh`. If you haven't done so, make sure to run within WSL2:
 
-#### OPTIONAL COMMAND
-
-```
-ktUpdateTaxonomy.sh
-```
-
 
 #### Making the Krona Plot
 
-Next, we need to use the NCBI taxonomy mapping for parent-child relationships and make the report. Let's make it in the `metagenomics` folder like so:
+Next, we need to use the NCBI taxonomy mapping for parent-child relationships and make the report. Let's make it in the `metagenomics` folder like so. This requires a taxonomy.tab file to be present. You can get it [here]() or by installing it from the command line like: 
+
+#### Illumina Reads
 
 ```
-ktImportTaxonomy -t 5 -m 3 -o metagenomics/miseq.krona.html metagenomics/miseq.k2.report
+ktImportTaxonomy -t 5 -m 3 -o metagenomics/miseq.krona.html metagenomics/miseq.k2.report 
 ```
+
+#### ONT Reads
+
+```
+ktImportTaxonomy -t 5 -m 3 -o metagenomics/ont.krona.html metagenomics/ont.k2.report 
+```
+
+IF you don't have the taxonomy.tab file, you can get it [here]() or installing with the command:
+
+```
+mkdir -p  ~/omics_workshop/downloads/ \
+    && wget https://github.com/jhuapl-bio/datasets/raw/main/databases/ncbi/taxonomy.tab.gz \
+    -O ~/omics_workshop/downloads/taxonomy.tab.gz \
+    && gzip -f -d ~/omics_workshop/downloads/taxonomy.tab.gz  && \
+    mv ~/omics_workshop/downloads/taxonomy.tab $(dirname $(which ktImportTaxonomy))/../opt/krona/taxonomy/
+```
+
+If you ran the `install.sh` script you should already have it in the correct location

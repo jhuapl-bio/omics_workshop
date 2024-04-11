@@ -57,4 +57,11 @@ mkdir -p  ~/omics_workshop/downloads/ \
     && gzip -f -d ~/omics_workshop/downloads/taxonomy.tab.gz  && \
     mv ~/omics_workshop/downloads/taxonomy.tab $(dirname $(which ktImportTaxonomy))/../opt/krona/taxonomy/
 
+wget https://genome-idx.s3.amazonaws.com/kraken/k2_viral_20240112.tar.gz \
+    -O ~/omics_workshop/downloads/k2_viral.tar.gz && \
+    mkdir -p ~/omics_workshop/downloads/k2_viral && \
+    tar -xvzf ~/omics_workshop/downloads/k2_viral.tar.gz -C ~/omics_workshop/downloads/k2_viral  && \
+    mv ~/omics_workshop/downloads/k2_viral ~/omics_workshop/databases/k2_viral
+
+
 echo "Setup complete."
