@@ -1,7 +1,7 @@
 
 # Created by https://www.toptal.com/developers/gitignore/api/python,jupyternotebooks
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,jupyternotebooks
-
+downloads
 references/test.fasta
 alignment/test_indices
 alignment

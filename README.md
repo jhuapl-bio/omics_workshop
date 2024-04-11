@@ -312,3 +312,21 @@ See [docs](https://github.com/DerrickWood/kraken2/blob/master/docs/MANUAL.markdo
 Lastly, do you notice any organisms missing from the alignment coverage stats?
 
 
+### Make a Krona Plot
+
+Make sure you've updated the taxonomy before you do this. This should've occurred when you installed everything with `install.bat` and `install.sh`. If you haven't done so, make sure to run within WSL2:
+
+#### OPTIONAL COMMAND
+
+```
+ktUpdateTaxonomy.sh
+```
+
+
+#### Making the Krona Plot
+
+Next, we need to use the NCBI taxonomy mapping for parent-child relationships and make the report. Let's make it in the `metagenomics` folder like so:
+
+```
+ktImportTaxonomy -t 5 -m 3 -o metagenomics/miseq.krona.html metagenomics/miseq.k2.report
+```

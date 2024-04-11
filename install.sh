@@ -48,4 +48,13 @@ fi
 echo "Cloning 'omics_workshop' GitHub repository..."
 git clone https://github.com/jhuapl-bio/omics_workshop ~/omics_workshop
 
+## make sure we update Taxonomy for krona to work! Requires internet
+echo "Downloading taxonomy information. Requires internet connection. This will take some time...."
+# bash ktUpdateTaxonomy.sh
+mkdir -p  ~/omics_workshop/downloads/ \
+    && wget https://github.com/jhuapl-bio/datasets/raw/main/databases/ncbi/taxonomy.tab.gz \
+    -O ~/omics_workshop/downloads/taxonomy.tab.gz \
+    && gzip -f -d ~/omics_workshop/downloads/taxonomy.tab.gz  && \
+    mv ~/omics_workshop/downloads/taxonomy.tab $(dirname $(which ktImportTaxonomy))/../opt/krona/taxonomy/
+
 echo "Setup complete."
