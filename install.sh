@@ -62,5 +62,6 @@ wget https://genome-idx.s3.amazonaws.com/kraken/k2_viral_20240112.tar.gz \
     tar -xvzf ~/omics_workshop/downloads/k2_viral.tar.gz -C ~/omics_workshop/downloads/k2_viral  && \
     mv ~/omics_workshop/downloads/k2_viral ~/omics_workshop/databases/k2_viral
 
+tar -k -xvzf ~/omics_workshop/databases/test_metagenome.tar.gz -C ~/omics_workshop/databases/
 
 echo "Setup complete."
