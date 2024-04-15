@@ -11,7 +11,7 @@ There should only be 1 requirement to install for Linux users and 2 for both Mac
 
 Steps to get everything:
 
-1. Download the file [install.ba](https://jhuapl-bio.github.io/omics_workshop/install.bat)
+1. Download the file [install.bat](https://jhuapl-bio.github.io/omics_workshop/install.bat)
 2. Run (double click) `install.bat` in your `Downloads` folder
 3. Follow the prompt that opens after some time to add a username and password: Defaults are "omics_workshop" and "omics_workshop" for user and password
 4. Download the file then open [wsl.bat](https://jhuapl-bio.github.io/omics_workshop/wsl.bat) in your downloads folder. Wait for it to complete and you are done!
