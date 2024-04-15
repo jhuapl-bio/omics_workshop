@@ -367,7 +367,7 @@ To install R on Windows, click **The Comprehensive R Archive Network link above*
 
 #### Mac 
 
-To install R on a Mac, click the “Download R for Mac” link. Next, click on the R 4.3.3 package link (or the package link for the most current release of R). An installer will download to guide you through the installation process, which is very easy. The installer lets you customize your installation, but the defaults will be suitable for most users. I’ve never found a reason to change them. If your computer requires a password before installing new progams, you’ll need it here.
+To install R on a Mac, click the “**Download R for Mac**” link. Next, click on the R 4.3.3 package link (or the package link for the most current release of R). An installer will download to guide you through the installation process, which is very easy. The installer lets you customize your installation, but the defaults will be suitable for most users. I’ve never found a reason to change them. If your computer requires a password before installing new programs, you’ll need it here.
 
 **Binaries Versus Source**
 
@@ -399,5 +399,31 @@ RStudio is an application like Microsoft Word—except that instead of helping y
 You can [download RStudio](https://posit.co/products/open-source/rstudio/) for free. Navigate to the link given, and then just click the “Download RStudio” button and follow the simple instructions that follow. Once you’ve installed RStudio, you can open it like any other program on your computer—usually by clicking an icon on your desktop.
 
 Even if you use RStudio, you’ll still need to download R to your computer. RStudio helps you use the version of R that lives on your computer, but it doesn’t come with a version of R on its own.
+
+### Installing packages in R studio
+
+Next we will install a couple of packages to get us started and going for the workshop. To install a package, open R studio and navigate to the console, there you can type 
+
+```
+install.packages()
+```
+
+where the package name you want to install, appears inside the parenthesis. There will be three packages we will need to install. The first two are tidyverse, and BiocManager. Go ahead, and type these into the console as they are shown below: 
+
+```
+install.packages("tidyverse")
+install.packages("BiocManager")
+```
+You might be asked "Do you want to install from sources the packages which need compilation?" and while either option is ok, let's say **no** for our purposes. 
+
+You may also be asked if you want to "Update all/some/none?" of the package dependencies. Generally, it's preferred to say yes, however for install and the workshop, we will be saying **no** and it will be ok.
+
+It's ok if they take a couple of minutes to install as there are several packages wrapped into these bundles so we can have all the functionality we need. Once you have both packages installed, we will install the third package a different way. Type:
+
+```
+library("BiocManager")
+BiocManager::install("mia")
+```
+This package is different because it is hosted at a different location. We will be using data from this package in the workshop. 
 
 
