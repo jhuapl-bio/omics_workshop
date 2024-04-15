@@ -14,8 +14,11 @@ Steps to get everything:
 
 1. Download the file [install.bat](https://jhuapl-bio.github.io/omics_workshop/install.bat)
 2. Run (double click) `install.bat` in your `Downloads` folder
-3. Follow the prompt that opens after some time to add a username and password: Defaults are `omics_workshop` and `omics_workshop` for user and password
-4. Download the file then open [wsl.bat](https://jhuapl-bio.github.io/omics_workshop/wsl.bat) in your downloads folder. Wait for it to complete and you are done!
+3. Follow the prompt that opens after some time to add a username and password: Defaults are
+   Username: `omics_workshop`
+   Password: `omics_workshop`
+   However, if you intend to use the system in the future you can set it to whatever information you want. **BE SURE TO REMEMBER THEM**
+5. Download the file then open [wsl.bat](https://jhuapl-bio.github.io/omics_workshop/wsl.bat) in your downloads folder. Wait for it to complete and you are done!
 
 
 ### Option B: Mac or Linux
