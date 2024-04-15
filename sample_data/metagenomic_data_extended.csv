@@ -1,0 +1,6 @@
+Sample,Kingdom,Phylum,Genus,Species,Other_Info,Abundance
+Sample1,Bacteria,Firmicutes,Clostridium,Clostridium difficile,Pathogenic,100
+Sample2,Bacteria,Proteobacteria,Escherichia,Escherichia coli,Commensal,200
+Sample3,Archaea,Euryarchaeota,Methanobrevibacter,Methanobrevibacter smithii,Methanogen,150
+Sample4,Fungi,Ascomycota,Saccharomyces,Saccharomyces cerevisiae,Yeast,120
+Sample5,Bacteria,Actinobacteria,Mycobacterium,Mycobacterium tuberculosis,Pathogen,180
