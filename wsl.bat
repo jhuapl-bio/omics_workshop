@@ -13,9 +13,11 @@ if %ERRORLEVEL% neq 0 (
 :: Execute the bash script in WSL
 echo Running install.sh in WSL...
 @REM wsl.exe -u root apt update
-wsl.exe bash -c "echo yes"
-wsl.exe bash -c "bash install.sh"
-
+echo Downloading install.sh from GitHub...
+wsl.exe wget -O ~/install.sh https://raw.githubusercontent.com/jhuapl-bio/omics_workshop/main/install.sh
+wsl.exe chmod +x ~/install.sh
+@REM wsl.exe bash -c "bash install.sh"
+wsl.exe ~/install.sh
 
 
 if %ERRORLEVEL% neq 0 (
