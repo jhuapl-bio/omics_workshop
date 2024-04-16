@@ -24,8 +24,11 @@ Steps to get everything:
 ### Option B: Mac or Linux
 
 1. Open a terminal
-2. Run the commands: `wget --no-check-certificate https://github.com/jhuapl-bio/omics_workshop/raw/main/install.sh -O install.sh && bash install.sh`
-3. Wait for the command to complete and you are done!
+2. Run the commands:
+```
+wget --no-check-certificate https://github.com/jhuapl-bio/omics_workshop/raw/main/install.sh -O install.sh && bash install.sh
+```
+4. Wait for the command to complete and you are done!
 
 
 
