@@ -84,4 +84,32 @@ conda create -y -n omics_workshop bowtie2 minimap2 kraken2 krona fastqc samtools
 conda activate omics_workshop
 ```
 
+Then, run the database extraction and code install 
+
+
+```
+
+echo "Cloning 'omics_workshop' GitHub repository..."
+git clone https://github.com/jhuapl-bio/omics_workshop ~/omics_workshop
+
+## make sure we update Taxonomy for krona to work! Requires internet
+echo "Downloading taxonomy information. Requires internet connection. This will take some time...."
+# bash ktUpdateTaxonomy.sh
+mkdir -p  ~/omics_workshop/downloads/ && conda activate omics_workshop \
+    && wget https://github.com/jhuapl-bio/datasets/raw/main/databases/ncbi/taxonomy.tab.gz \
+    -O ~/omics_workshop/downloads/taxonomy.tab.gz \
+    && gzip -f -d ~/omics_workshop/downloads/taxonomy.tab.gz  && \
+    mv ~/omics_workshop/downloads/taxonomy.tab $(dirname $(which ktImportTaxonomy))/../opt/krona/taxonomy/
+
+wget https://genome-idx.s3.amazonaws.com/kraken/k2_viral_20240112.tar.gz \
+    -O ~/omics_workshop/downloads/k2_viral.tar.gz && \
+    mkdir -p ~/omics_workshop/downloads/k2_viral && \
+    tar -xvzf ~/omics_workshop/downloads/k2_viral.tar.gz -C ~/omics_workshop/downloads/k2_viral  && \
+    mv ~/omics_workshop/downloads/k2_viral ~/omics_workshop/databases/k2_viral
+
+tar -k -xvzf ~/omics_workshop/databases/test_metagenome.tar.gz -C ~/omics_workshop/databases/
+
+```
+
+
 Congratulations, you've completed the required installation steps for running things from the command line
