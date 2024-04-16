@@ -33,6 +33,21 @@ wget --no-check-certificate https://github.com/jhuapl-bio/omics_workshop/raw/mai
 4. Wait for the command to complete and you are done!
 
 
+#### Error - Only run if `commmand not found` is encountered for Mac OS 
+
+If you don't have `wget` on your system try to install it with `brew` 
+
+Make sure you have `brew` by running:
+
+```
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+Then, run:
+
+```
+brew install wget 
+```
 
 
 If you need additional help, see [manual steps](manual_install.MD)
