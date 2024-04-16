@@ -52,6 +52,10 @@ brew install wget
 
 If you need additional help, see [manual steps](manual_install.MD)
 
+## Workshop Material 
+
+**Do not perform the below steps until requested during the specified day**
+
 ## Alignment
 
 ### Short (Illumina) Reads
