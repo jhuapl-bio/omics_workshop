@@ -15,7 +15,7 @@ Steps to get everything:
 1. Download the file. Use only **one** of the two options provided here:
    - Install Ubuntu from the [Microsoft Store](https://apps.microsoft.com/detail/9pdxgncfsczv?rtc=1&hl=en-us&gl=US)
    - If that fails then run: [install.bat](https://jhuapl-bio.github.io/omics_workshop/install.bat)
-3. Run (double click) `install.bat` in your `Downloads` folder
+      - Run (double click) `install.bat` in your `Downloads` folder
 4. Follow the prompt that opens after some time to add a username and password: Defaults are
    Username: `omics_workshop`
    Password: `omics_workshop`
