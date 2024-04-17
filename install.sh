@@ -16,7 +16,7 @@ fi
 unameOut="$(uname -s)"
 case "${unameOut}" in
     Linux*)     machine="";;
-    Darwin*)    machine="CONDA_SUBDIR=osx064";;
+    Darwin*)    machine="CONDA_SUBDIR=osx-64";;
     *)          machine=""
 esac
 echo ${machine}
