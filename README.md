@@ -465,4 +465,8 @@ BiocManager::install("mia")
 ```
 This package is different because it is hosted at a different location. We will be using data from this package in the workshop. 
 
+## Phylogenetics software
+
+Data for phylogenetic exercises and software for Windows, macOS, and Linux machines can be found [here](https://phylodynamics.github.io/).
+
 
