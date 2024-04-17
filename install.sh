@@ -26,7 +26,7 @@ source ~/miniconda3/etc/profile.d/conda.sh
 
 # Wait for the user to close and reopen their shell or source their bashrc
 echo "Please close and reopen your terminal, or run 'source ~/.bashrc', then rerun this script."
-conda env list
+
 # Check if the omics_workshop environment exists
 if  conda env list | grep -q 'omics_workshop'; then
     echo "Removing existing 'omics_workshop' environment..."
@@ -37,7 +37,7 @@ echo "Creating 'omics_workshop' environment..."
 
 
 
-$machine conda create -y -c bioconda -n omics_workshop bowtie2 minimap2 kraken2 krona fastqc samtools bcftools git python
+eval "$machine conda create -y -c bioconda -n omics_workshop bowtie2 minimap2 kraken2 krona fastqc samtools bcftools git python"
 
 if [ -d ~/omics_workshop ]; then
     echo "Removing existing 'omics_workshop' directory..."
