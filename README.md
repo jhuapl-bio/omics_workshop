@@ -279,7 +279,7 @@ bcftools \
     mpileup \
     --fasta-ref references/test.fasta  \
     alignment/miseq.bam \
-    | bcftools call -mv -Oz -o variants/miseq.vcf.gz; 
+    | bcftools call -mv -Oz -o variants/miseq.bcf; 
 ```
 
 Look at the contents of the command:
@@ -293,24 +293,24 @@ Look at the contents of the command:
 - `-v` Only show variants in our file
 - `-O` Type of output. we specify `z` afterwards for compressed: 
   - `Output type: 'b' compressed BCF; 'u' uncompressed BCF; 'z' compressed VCF; 'v' uncompressed VCF [v]`
-- `-o` output filename set to `variants/miseq.vcf.gz`
+- `-o` output filename set to `variants/miseq.bcf`
 
 Since we need to index things for a downstream step from our vcf we then need to run:
 
 ```
-bcftools index variants/miseq.vcf.gz; 
+bcftools index -f variants/miseq.bcf; 
 ```
 
 - `index` is a subcommand to index the vcf file
-- `variants/miseq.vcf.gz; ` positional input for the vcf file. An index file will be made in the same directory with the `.csi` extension.
+- `variants/miseq.bcf; ` positional input for the vcf file. An index file will be made in the same directory with the `.csi` extension.
 
 
 Congrats! You made your first variant-calling file. Let's take a look at the contents:
 
-**Hint** the output format is compressed! That means we need to run `gzip` to view it. If we run `-d` (decompress) and `-c` the output will go to your stdout/stderr and only in your terminal contents. It wont make a file but allows us to quickly view things if we pipe it to `less`
+**Hint** the output format is compressed (`.bcf` extension)! That means we need to run `gzip` to view it. If we run `-d` (decompress) and `-c` the output will go to your stdout/stderr and only in your terminal contents. It wont make a file but allows us to quickly view things if we pipe it to `less`
 
 ```
-gzip -dc variants/miseq.vcf.gz  | less
+gzip -dc variants/miseq.bcf  | less
 ```
 
 To See contents:
@@ -323,7 +323,7 @@ To See contents:
 ##reference=file://references/test.fasta
 ....
 ```
-Near the top (we opened it in `less`, use `q` to quit) there is a lot of metadata. Uninmportant, for the most part to use, but to downstream steps.
+Near the top (we opened it in `less`, use `q` to quit) there is a lot of metadata. Unimportant, for the most part to use, but to downstream steps.
 
 Let's use the down-arrows on our keyboard to scroll to the actual contents of the variant analysis, which looks like:
 
@@ -352,7 +352,7 @@ Now that we've created a BAM file and indexed it, we need to make a consensus (F
 ```
 cat references/test.fasta | bcftools \
    consensus \
-   variants/miseq.vcf.gz > alignment/miseq.consensus.fna
+   variants/miseq.bcf > alignment/miseq.consensus.fna
 ```
 
 You'll get an output that states something like: `Applied <x number of> variants`
