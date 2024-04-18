@@ -38,7 +38,9 @@ echo "Creating 'omics_workshop' environment..."
 
 
 eval "$machine conda create -y -c bioconda -n omics_workshop bowtie2 minimap2 kraken2 krona fastqc samtools bcftools git fastp python"
-
+if [[ $machine -eq "CONDA_SUBDIR=osx-64" ]] then    
+    conda activate omics_workshop &&  python -c "import platform;print(platform.machine())" && conda config --env --set subdir osx-64
+fi
 if [ -d ~/omics_workshop ]; then
     echo "Removing existing 'omics_workshop' directory..."
     rm -rf ~/omics_workshop
