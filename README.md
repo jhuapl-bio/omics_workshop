@@ -52,6 +52,14 @@ brew install wget
 
 If you need additional help, see [manual steps](manual_install.MD)
 
+### Updating at any point
+
+If you feel that any install did not complete successfully, you can rerun `install.sh` in the appropriate directory or through `wsl.bat` and type in `y` to prompt a full reinstall OR `n` (default) to just update or install if not installed yet. 
+
+For mac or linux, just rerun your one-line command `wget --no-check-certificate https://github.com/jhuapl-bio/omics_workshop/raw/main/install.sh -O install.sh && bash install.sh`. 
+
+**Hint** you can specify `-f` like `bash install.sh -f` to skip the prompt for y/n on a force install. It will set it to `y` by default. 
+
 ## Workshop Material 
 
 **Do not perform the below steps until requested during the specified day**
@@ -247,11 +255,76 @@ samtools sort -o alignment/miseq.sorted.bam alignment/miseq.bam \
 
 You should notice a `.bai` file in the new directory. This will be used for making consensus files in the future for reference-based alignments.
 
+## Variant-calling
+
+What if we want to take a look at what variations are in our data relative to the reference genome we used? In order to use that, we have to use another tool called `bcftools` which can not only create these variant-called files (.vcf) but also run [assembly](#reference-based-assembly)
+
+In order to run variant analysis, we have to type and run this command for the miseq data
+
+Unfortunately, `bcftools` needs your FASTA file to be decompressed, so let's decompress a `.gz` file (`test.fasta.gz`)!
+
+To do this, let's run:
+
+```
+gzip -df --keep references/test.fasta.gz
+```
+
+`gzip` is used to decompress `.gz` files, which is a common format of compression in Unix, much like `.zip` is for Windows systems. All you need to know is that `.gz` means the file is compressed and not readable by human eyes. 
+
+Next, let's use a large command to make a variant file. Don't worry, we'll break apart each piece. 
+
+```
+
+bcftools \
+    mpileup \
+    --fasta-ref references/test.fasta  \
+    alignment/miseq.bam \
+    | bcftools call --output-type v -c  \
+    | bcftools view --output-file variants/miseq.vcf --output-type z
+```
+
+Congrats! You made your first variant-calling file. Let's take a look at the contents:
+
+```
+less variants/miseq.bam
+
+#fileformat=VCFv4.2
+##FILTER=<ID=PASS,Description="All filters passed">
+##bcftoolsVersion=1.18+htslib-1.19.1
+##bcftoolsCommand=mpileup --fasta-ref references/test.fasta alignment/miseq.bam
+##reference=file://references/test.fasta
+....
+```
+Near the top (we opened it in `less`, use `q` to quit) there is a lot of metadata. Uninmportant, for the most part to use, but to downstream steps.
+
+Let's use the down-arrows on our keyboard to scroll to the actual contents of the variant analysis, which looks like:
+
+```
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	alignment/miseq.bam
+...
+Staphylococcus_aureus_subsp._aureus_NCTC_8325	2584776	.	C	.	32.9956	.	DP=1;MQ0F=0;AF1=0;AC1=0;DP4=0,1,0,0;MQ=40;FQ=-29.9905	GT:PL	0/0:0
+Staphylococcus_aureus_subsp._aureus_NCTC_8325	2584777	.	T	A	10.4247	.	DP=1;SGB=-0.379885;MQ0F=0;AF1=1;AC1=2;DP4=0,0,0,1;MQ=40;FQ=-29.9905	GT:PL	1/1:40,3,0
+Staphylococcus_aureus_subsp._aureus_NCTC_8325	2584778	.	C	.	32.9956	.	DP=1;MQ0F=0;AF1=0;AC1=0;DP4=0,1,0,0;MQ=40;FQ=-29.9905	GT:PL	0/0:0
+...
+```
+
+To search quickly for a piece of text, you can type `/` like if we wanted to search for position `2584777` with `/2584777`
+
+You can see here that the `REF` and `ALT` BOTH have values, compared to other lines where **just** `REF` was present. If there is **no** `ALT` there is no variant/SNP. But if there is one then there is a variant called at that position for that reference!
+
+
+
+
 ## Reference-based Assembly
 
-Now that we've created a BAM file and indexed it, we need to make a consensus (FASTA) file from this information. We now will use another tool, called `bcftools` 
+Now that we've created a BAM file and indexed it, we need to make a consensus (FASTA) file from this information. 
 
 
+```
+bcftools \
+   consensus \
+   variants/miseq.vcf > alignment/miseq.consensus.fna
+```
 
 
 ## Kraken2 - Metagenomics for agnostic classifications
@@ -377,7 +450,7 @@ ktImportTaxonomy -t 5 -m 3 -o metagenomics/miseq.krona.html metagenomics/miseq.k
 ktImportTaxonomy -t 5 -m 3 -o metagenomics/ont.krona.html metagenomics/ont.k2.report 
 ```
 
-IF you don't have the taxonomy.tab file, you can get it [here]() or installing with the command:
+IF you don't have the taxonomy.tab file, you can get it [here](https://github.com/jhuapl-bio/datasets/blob/main/databases/ncbi/taxonomy.tab.gz) or installing with the command:
 
 ```
 mkdir -p  ~/omics_workshop/downloads/ \
