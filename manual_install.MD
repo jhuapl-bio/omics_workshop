@@ -82,6 +82,8 @@ Resources:
 ```
 conda create -y -n omics_workshop bowtie2 minimap2 kraken2 krona fastqc samtools bcftools git fastp python 
 conda activate omics_workshop
+python -c "import platform;print(platform.machine())"
+conda config --env --set subdir osx-64
 ```
 
 Then, run the database extraction and code install 
