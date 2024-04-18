@@ -37,7 +37,7 @@ echo "Creating 'omics_workshop' environment..."
 
 
 
-eval "$machine conda create -y -c bioconda -n omics_workshop bowtie2 minimap2 kraken2 krona fastqc samtools bcftools git python"
+eval "$machine conda create -y -c bioconda -n omics_workshop bowtie2 minimap2 kraken2 krona fastqc samtools bcftools git fastp python"
 
 if [ -d ~/omics_workshop ]; then
     echo "Removing existing 'omics_workshop' directory..."
