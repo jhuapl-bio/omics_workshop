@@ -110,6 +110,6 @@ else
         mv ~/omics_workshop/downloads/k2_viral ~/omics_workshop/databases/k2_viral
 fi
 
-tar -k -xvzf ~/omics_workshop/databases/test_metagenome.tar.gz -C ~/omics_workshop/databases/
+tar  -xvzf ~/omics_workshop/databases/test_metagenome.tar.gz -C ~/omics_workshop/databases/
 
 echo "Setup complete."
