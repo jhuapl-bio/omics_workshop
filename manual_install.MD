@@ -80,7 +80,7 @@ Resources:
 #### Packages
 
 ```
-conda create -y -n omics_workshop bowtie2 minimap2 kraken2 krona fastqc samtools bcftools git python 
+conda create -y -n omics_workshop bowtie2 minimap2 kraken2 krona fastqc samtools bcftools git fastp python 
 conda activate omics_workshop
 ```
 
