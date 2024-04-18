@@ -279,15 +279,43 @@ bcftools \
     mpileup \
     --fasta-ref references/test.fasta  \
     alignment/miseq.bam \
-    | bcftools call --output-type v -c  \
-    | bcftools view --output-file variants/miseq.vcf --output-type z
+    | bcftools call -mv -Oz -o variants/miseq.vcf.gz; 
 ```
+
+Look at the contents of the command:
+
+- `bcftools` is the primary suite of tools we can use to make our assembly
+- `mpileup` is the subcommand of `bcftools` toolkit to extract variants using a reference
+- `--fasta-ref` is the location of your local fasta file to get the variant comparison from
+- `alignment/miseq.bam` our positional placement of the alignment file we made for the miseq reads
+- `| bcftools call` is us piping the content of the `mpileup` command 
+- `-m` multiallelic-caller
+- `-v` Only show variants in our file
+- `-O` Type of output. we specify `z` afterwards for compressed: 
+  - `Output type: 'b' compressed BCF; 'u' uncompressed BCF; 'z' compressed VCF; 'v' uncompressed VCF [v]`
+- `-o` output filename set to `variants/miseq.vcf.gz`
+
+Since we need to index things for a downstream step from our vcf we then need to run:
+
+```
+bcftools index variants/miseq.vcf.gz; 
+```
+
+- `index` is a subcommand to index the vcf file
+- `variants/miseq.vcf.gz; ` positional input for the vcf file. An index file will be made in the same directory with the `.csi` extension.
+
 
 Congrats! You made your first variant-calling file. Let's take a look at the contents:
 
-```
-less variants/miseq.bam
+**Hint** the output format is compressed! That means we need to run `gzip` to view it. If we run `-d` (decompress) and `-c` the output will go to your stdout/stderr and only in your terminal contents. It wont make a file but allows us to quickly view things if we pipe it to `less`
 
+```
+gzip -dc variants/miseq.vcf.gz  | less
+```
+
+To See contents:
+
+```
 #fileformat=VCFv4.2
 ##FILTER=<ID=PASS,Description="All filters passed">
 ##bcftoolsVersion=1.18+htslib-1.19.1
@@ -300,11 +328,14 @@ Near the top (we opened it in `less`, use `q` to quit) there is a lot of metadat
 Let's use the down-arrows on our keyboard to scroll to the actual contents of the variant analysis, which looks like:
 
 ```
-#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	alignment/miseq.bam
 ...
-Staphylococcus_aureus_subsp._aureus_NCTC_8325	2584776	.	C	.	32.9956	.	DP=1;MQ0F=0;AF1=0;AC1=0;DP4=0,1,0,0;MQ=40;FQ=-29.9905	GT:PL	0/0:0
-Staphylococcus_aureus_subsp._aureus_NCTC_8325	2584777	.	T	A	10.4247	.	DP=1;SGB=-0.379885;MQ0F=0;AF1=1;AC1=2;DP4=0,0,0,1;MQ=40;FQ=-29.9905	GT:PL	1/1:40,3,0
-Staphylococcus_aureus_subsp._aureus_NCTC_8325	2584778	.	C	.	32.9956	.	DP=1;MQ0F=0;AF1=0;AC1=0;DP4=0,1,0,0;MQ=40;FQ=-29.9905	GT:PL	0/0:0
+#CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO    FORMAT  alignment/miseq.bam
+Staphylococcus_aureus_subsp._aureus_NCTC_8325   4580    .       G       A       10.7923 .       DP=1;SGB=-0.379885;MQ0F=0;AC=2;AN
+=2;DP4=0,0,0,1;MQ=42    GT:PL   1/1:40,3,0
+Staphylococcus_aureus_subsp._aureus_NCTC_8325   5229    .       C       A       10.7923 .       DP=1;SGB=-0.379885;MQ0F=0;AC=2;AN
+=2;DP4=0,0,1,0;MQ=42    GT:PL   1/1:40,3,0
+Staphylococcus_aureus_subsp._aureus_NCTC_8325   11300   .       G       A       10.7923 .       DP=1;SGB=-0.379885;MQ0F=0;AC=2;AN
+=2;DP4=0,0,1,0;MQ=42    GT:PL   1/1:40,3,0
 ...
 ```
 
@@ -313,19 +344,28 @@ To search quickly for a piece of text, you can type `/` like if we wanted to sea
 You can see here that the `REF` and `ALT` BOTH have values, compared to other lines where **just** `REF` was present. If there is **no** `ALT` there is no variant/SNP. But if there is one then there is a variant called at that position for that reference!
 
 
-
-
 ## Reference-based Assembly
 
 Now that we've created a BAM file and indexed it, we need to make a consensus (FASTA) file from this information. 
 
 
 ```
-bcftools \
+cat references/test.fasta | bcftools \
    consensus \
-   variants/miseq.vcf > alignment/miseq.consensus.fna
+   variants/miseq.vcf.gz > alignment/miseq.consensus.fna
 ```
 
+You'll get an output that states something like: `Applied <x number of> variants`
+
+You've now made a consensus FASTA file that can be viewed in IGV!
+
+```
+Neisseria_gonorrhoeae_strain_TUM19854   983869  .       G       A       10.7923 .       DP=1;SGB=-0.379885;MQ0F=0;AC=2;AN=2;DP4=0,0,1,0;MQ=42    GT:PL   1/1:40,3,0
+```
+For example, let's look at position 983869 of Neisseria gonorrhoeae in the file ^ and in IGV
+
+
+![IGV](imgs/IGV_variant_ng.png)
 
 ## Kraken2 - Metagenomics for agnostic classifications
 
