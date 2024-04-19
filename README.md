@@ -72,17 +72,21 @@ For paired-end, short reads we recommend Bowtie2, as it has shown to provide mor
 
 #### Building an index
 
+The first thing we have to do is make a directory of indices that allow a faster lookup of our reference during the alignment process. This is a Bowtie2 specific need. Please be aware that the time it takes to build your indices is directly related to the size of the reference FASTA file you're aligning against. 
+
 Expected Runtime: 2 minutes
 
 ```
-
 REFERENCE=references/test.fasta.gz
-rm -r alignment/test_indices
 mkdir -p alignment/test_indices/
 bowtie2-build $REFERENCE alignment/test_indices/test_indices
-
 ```
 
+- `REFERENCE=references/test.fasta.gz` We assign an environmental variable for readability. You can also just write the exact path in the position for the command but for presentation purposes we are performing it this way. 
+- `mkdir` Let's make the output directory for the indices
+- `bowtie2-build` The primary command to build your indices
+- `$REFERENCE` The environmental variable we made in the previous line that equals: `references/test.fasta.gz`
+- `alignment/test_indices/test_indices` The positional output directory name
 
 #### Running Bowtie2 to generate a BAM (alignment) file
 
@@ -101,10 +105,69 @@ READS2=fastq/miseq_reads_R2.fastq.gz
 bowtie2 \
     -x $INDEX \
     -1 $READS1 -2 $READS2 \
-    2> shortreads.bowtie2.log \
     | samtools sort | samtools view -b -h -o alignment/miseq.bam
+```
+
+
+
+- `-x` We made the $INDEX files in an earlier step. This allows us to have a "faster lookup" for the alignment process
+- `-1` & `-2` Are the paired-end reads were aligning against. If it was single-end reads, then we would write `-U` instead.
+- `| samtools view` We pipe the sort to `view` which is a subcommand that lets use either view or convert formats of our alignments. 
+- `-o` Specify the output filename, in this case, the `miseq.sam` file
+- `-h`  We want to include the header (metadata of the alignment)
+- `-b` Convert the SAM output to BAM format (compressed SAM, can be many magnitudes smaller in size)
+
+
+Your console/terminal should look something like this:
 
 ```
+39007 reads; of these:
+  39007 (100.00%) were paired; of these:
+    37666 (96.56%) aligned concordantly 0 times
+    1225 (3.14%) aligned concordantly exactly 1 time
+    116 (0.30%) aligned concordantly >1 times
+    ----
+    37666 pairs aligned concordantly 0 times; of these:
+      32862 (87.25%) aligned discordantly 1 time
+    ----
+    4804 pairs aligned 0 times concordantly or discordantly; of these:
+      9608 mates make up the pairs; of these:
+        7244 (75.40%) aligned 0 times
+        606 (6.31%) aligned exactly 1 time
+        1758 (18.30%) aligned >1 times
+90.71% overall alignment rate
+
+```
+
+Here, we can see that ~90.7% of all reads aligned at some point with some other stats sprinkled in there. 
+
+
+### Viewing your BAM file
+
+In the previous steps, we piped the output of our aligners and another samtools command into a final `samtools view...` which allowed us to convert the output into a compressed version (BAM) of the standard alignment output, SAM. In order to view the BAM file, we can simply run: 
+
+
+```
+samtools view  alignment/miseq.bam   | head
+```
+
+- `view` Subcommand to view the content of whatever file in the position index
+- `head` a command we pipe to just peak at the top of the file, which follows the `|` command as `samtools view` by default will output to stdout/stderr (your terminal).
+
+Notice how we removed the `-b` parameter, which indicated that we wanted to convert the standard SAM output that is human-readable into the compressed BAM format. Notice how I ran `head` to only get the top 10 lines from the file by default. You can remove the `| head` (we will do this next step) to see the entire file. Be aware that alignment files are typically massive decompressed in most metagenomics samples, reaching 10's of GBs in size in some cases. 
+
+
+Now, let's do something similar to the final step in the alignment pipe command because we want to make the file permanently viewable. That is, we want to remove the dependence on using `samtools view` everytime we want to look at the file. We tweak a small amount of code & instead run (to make a SAM file):
+
+```
+samtools view -h alignment/miseq.bam -o alignment/miseq.sam
+```
+
+- `-o` Specify the output filename, in this case, the `miseq.sam` file
+- `view` Subcommand to view the content of whatever file in the position index
+- `-h`  We want to include the header (metadata of the alignment)
+
+
 
 
 ### Long (ONT) Reads.
@@ -127,6 +190,17 @@ minimap2 \
     -L -a | samtools sort | samtools view -b -h -o alignment/ont.bam  
 
 ```
+
+- `-x map-ont` Specifies that we want minimap2 to assume that the data is `ont` data. 
+- `$REFERENCE` A few lines above, we define our environment variable: FASTA file. This is positional and pefore the read positions
+- `$READS` The list of READS we want to align. In our case, it is the example ONT reads we've been looking at
+- `-L` Use CIGAR ops. Unimportant for explanation but useful for downstream steps
+- `-a` Output in the SAM format (standard alignment format)
+- `| samtools sort` We go ahead and output the stdout from the alignment algorithm to samtools to sort on position and reference found.
+- `| samtools view` We pipe the sort to `view` which is a subcommand that lets use either view or convert formats of our alignments. 
+- `-o` Specify the output filename, in this case, the `miseq.sam` file
+- `-h`  We want to include the header (metadata of the alignment)
+- `-b` Convert the SAM output to BAM format (compressed SAM, can be many magnitudes smaller in size)
 
 Expected command lint stdout/stderr
 
@@ -395,6 +469,13 @@ Remember these parameters for tar. They aren't important to kraken2 but are usef
 kraken2 --report metagenomics/miseq.k2.report  --paired --out metagenomics/miseq.k2.out --db databases/test_metagenome fastq/miseq_reads_R1.fastq.gz fastq/miseq_reads_R2.fastq.gz
 ```
 
+- `--report` the primary report file (see contents below) that contains the hierarchical distribution of organism abundance in our sample
+- `--out` the read-by-read classification file. This can be very large depending on the amount of reads you classify
+- `--db` the kraken2 database that contains the `k2d` index files necessary to perform classification. 
+- `--paired` indicating that we are classifying a set of paired-end read files
+- `fastq/miseq_reads_R1.fastq.gz fastq/miseq_reads_R2.fastq.gz` The positional read names (can be compressed or not) for our example. This example, we use paired-end reads. 
+
+
 You will see output like 
 
 ```
@@ -464,6 +545,8 @@ Let's now do the same for our ONT data
 kraken2 --report metagenomics/ont.k2.report --out metagenomics/ont.k2.out --db databases/test_metagenome fastq/ont_reads.fastq.gz
 ```
 
+Be aware that we've removed `--paired` to indicate that we are classifying single-end reads. 
+
 See [docs](https://github.com/DerrickWood/kraken2/blob/master/docs/MANUAL.markdown) for more detailed information on kraken2
 
 Lastly, do you notice any organisms missing from the alignment coverage stats?
@@ -483,6 +566,23 @@ Next, we need to use the NCBI taxonomy mapping for parent-child relationships an
 ```
 ktImportTaxonomy -t 5 -m 3 -o metagenomics/miseq.krona.html metagenomics/miseq.k2.report 
 ```
+- `ktImportTaxonomy`
+- `-t` The taxonomic ID column
+- `-m` The abundance (magnitude column number in our k2 report file)
+- `-o` The output html file
+- `metagenomics/miseq.k2.report` The positional input filename from the kraken2 results we made earlier (report file)
+
+Remember, the content of the k2 report looks like
+
+```
+Abundance classified_at_clade classified_at_taxon_only rank  taxid organismName
+14.34  11185   11185   S1      93061                       Staphylococcus aureus subsp. aureus NCTC 8325
+```
+
+So we want to set the magnitude to `-m 3` since Krona wants to get the size for each level rather than the aggregate across it AND all children to make the hierarchy we will sow in a moment. 
+
+
+Now, open up the `metagenomics/miseq.krona.html` by double-clicking it. It should take you to a web-browser with the interactive plot.
 
 #### ONT Reads
 
