@@ -1,6 +1,6 @@
 # General Information for Commands and Tutorial Material for the JHU/APL Omics Workshop
 
-## Setup 
+## Day 1 Setup and Installations
 
 **Important Note**: All files can be accessed directly in the [GitHub](https://github.com/jhuapl-bio/omics_workshop) or at the website [here](https://jhuapl-bio.github.io/omics_workshop/)
 
@@ -64,7 +64,9 @@ For mac or linux, just rerun your one-line command `wget --no-check-certificate 
 
 **Do not perform the below steps until requested during the specified day**
 
-## Alignment
+
+## Day 3 Alignment
+
 
 ### Short (Illumina) Reads
 
@@ -456,9 +458,11 @@ For example, let's look at position 983869 of Neisseria gonorrhoeae in the file 
 
 ![IGV](imgs/IGV_variant_ng.png)
 
-## Kraken2 - Metagenomics for agnostic classifications
+## Day 4 Metagenomics for agnostic classifications
 
-### Defining our command
+### Defining our command using Kraken2
+
+
 
 
 Type:
@@ -470,7 +474,7 @@ mkdir -p metagenomics
 tar -k -C databases -xvzf databases/test_metagenome.tar.gz
 ```
 
-Remember these parameters for tar. They aren't important to kraken2 but are useful when working with decompressing a tarball
+Remember these parameters for tar. They aren't important to [kraken2](https://github.com/DerrickWood/kraken2/wiki) but are useful when working with decompressing a tarball
 
 - `-C` Change to directory to perform decompressing. This is where the files will live after decompression has taken place
 - `-k` Keep the original tarball. Omit this in most cases if you dont want to store as much as soon as you've decompressed.
