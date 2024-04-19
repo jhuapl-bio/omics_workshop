@@ -275,6 +275,9 @@ minimap2 \
     -L -a | samtools sort | samtools view -b -h -o alignment/ont.q60.bam -q 60  && samtools coverage alignment/ont.q60.bam
 ```
 
+- `| samtools sort` We go ahead and output the stdout from the alignment algorithm to samtools to sort on position and reference found.
+
+
 Expected stdout/stderr
 
 ```
@@ -314,10 +317,14 @@ Let's first sort and index the ONT reads
 ```
 samtools sort -o alignment/ont.sorted.bam alignment/ont.bam \
     && mv alignment/ont.sorted.bam alignment/ont.bam \
-    &&  samtools index alignment/ont.bam
+    && samtools index alignment/ont.bam
 
 ```
 
+- `-o` Output filename as a sorted BAM file
+- `| samtools sort` We go ahead and output the stdout from the alignment algorithm to samtools to sort on position and reference found.
+- `&& mv alignment/ont.sorted.bam alignment/ont.bam` We're going to go ahead and replace the new sorted bam with the old one. This is a better file, as it allows lookups to be quicker. The sorted does not harm anything as it relates to the original BAM contents. 
+- `&&  samtools index alignment/ont.bam` We run a 3rd command that indexes the `bam` file for consensus purposes
 
 And for Miseq reads (Illumina)
 
@@ -386,6 +393,8 @@ Congrats! You made your first variant-calling file. Let's take a look at the con
 ```
 gzip -dc variants/miseq.bcf  | less
 ```
+- `-d` Decompress the bcf file (compressed vcf filename)
+- `-c` Put the contents to the terminal rather than make a new file
 
 To See contents:
 
@@ -428,6 +437,12 @@ cat references/test.fasta | bcftools \
    consensus \
    variants/miseq.bcf > alignment/miseq.consensus.fna
 ```
+
+- `cat references/test.fasta` we first output the contents of the fasta file into our terminal
+- `| bcftools ` we pipe the contents to bcftools 
+- `consensus` subcommand of `bcftools` to make a consensus from the upcoming information
+-  `variants/miseq.bcf` positional input to set a `.vcf` file which contains all the variants that will be mapped, position-wise, to the reference FASTA.
+- `> alignment/miseq.consensus.fna` Redirect the output (which would normally be on the terminal) into the consensus file
 
 You'll get an output that states something like: `Applied <x number of> variants`
 
