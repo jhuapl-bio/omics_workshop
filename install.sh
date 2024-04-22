@@ -10,11 +10,15 @@ while getopts "f" opt; do
   esac
 done
 
+
+
 # prompt the user with y or n (defauult is n) to set f to overwrite
 if [[ $f == "nothing" ]]; then
     read -p "This script will install the omics_workshop environment and download necessary databases. Do you want to overwrite existing environments and databases? (y/n). Default is (n) OR type "Enter/Return" to use the default " f
     if [[ $f == "y" ]] || [[ $f == "Y" ]]; then
         f="overwrite"
+    else
+        f="nothing"
     fi
 fi
 
