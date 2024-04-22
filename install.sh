@@ -116,4 +116,8 @@ fi
 
 tar  -xvzf ~/omics_workshop/databases/test_metagenome.tar.gz -C ~/omics_workshop/databases/
 
+
+gzip -f -d --keep references/test.fasta.gz
+
+
 echo "Setup complete."
