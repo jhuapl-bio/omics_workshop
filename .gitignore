@@ -6,7 +6,7 @@ downloads
 databases/k2_viral*
 databases/k2*
 databases/test_metagenome
-references/test.fasta
+#references/test.fasta
 alignment/test_indices
 alignment
 .DS_Store
