@@ -27,17 +27,29 @@ if [[ $f == "overwrite" ]]; then
     echo "Overwriting existing environments and databases for a fresh (re)install..."
 fi
 unameOut="$(uname -s)"
+ARCH=$(uname -m)
 
 case "${unameOut}" in
     Linux*)     machine="";OS="Linux";;
-    Darwin*)    machine="CONDA_SUBDIR=osx-64"; OS="mac";;
+    Darwin*)    machine="CONDA_SUBDIR=osx-64"; OS="Darwin"; CONDA_SUBDIR=osx-64;;
     *)          machine=""; OS="Linux";;
 esac
+
+if [[ $ARCH == "aarch64" ]]; then 
+    machine="CONDA_SUBDIR=linux-64"
+    CONDA_SUBDIR=linux-64
+fi
+
+
 echo Your Machine:${machine}, OS:${OS}  
 
 
 
 source $HOME/miniconda3/etc/profile.d/conda.sh
+
+
+
+
 if [[ $f != "nothing" ]]; then
     rm -r ~/miniconda3
 fi
@@ -46,8 +58,7 @@ if ! command -v conda; then
     echo "Conda not found. Installing Miniconda..."
     
 
-    OS=$(uname -s)
-    ARCH=$(uname -m)
+    
     echo "OS: $OS, ARCH: $ARCH"
     if [[ "$OS" == "Linux" && "$ARCH" == "x86_64" ]]; then
         echo "Downloading Miniconda for Linux x86_64..."
@@ -122,10 +133,10 @@ if ! command -v git; then
     exit 1
 fi
 
-if [[ $machine -eq "CONDA_SUBDIR=osx-64" ]]; then    
+if [[ $machine -eq "CONDA_SUBDIR=osx-64" ]] || $machine -eq "CONDA_SUBDIR=linux-64"; then    
     conda activate omics_workshop && \
         python -c "import platform;print(platform.machine())" && \
-        conda config --env --set subdir osx-64
+        conda config --env --set subdir $CONDA_SUBDIR
 fi
 
 
