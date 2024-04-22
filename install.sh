@@ -1,6 +1,8 @@
 #!/bin/bash -i
 
 
+f="nothing"
+
 while getopts "f" opt; do
   case "$opt" in
     f)  f="overwrite"
@@ -9,7 +11,7 @@ while getopts "f" opt; do
 done
 
 # prompt the user with y or n (defauult is n) to set f to overwrite
-if [[ $f == "" ]]; then
+if [[ $f == "nothing" ]]; then
     read -p "This script will install the omics_workshop environment and download necessary databases. Do you want to overwrite existing environments and databases? (y/n). Default is (n) OR type "Enter/Return" to use the default " f
     if [[ $f == "y" ]] || [[ $f == "Y" ]]; then
         f="overwrite"
@@ -50,17 +52,17 @@ source $conda_base/etc/profile.d/conda.sh
 
 # Check if the omics_workshop environment exists
 
-if  conda env list | grep -q 'omics_workshop' && [[ $f == "" ]]; then
+if  conda env list | grep -q 'omics_workshop' && [[ $f == "nothing" ]]; then
     echo "Env found, updating omics_workshop environment..."
     # 
     eval "conda activate omics_workshop && $machine conda install -y -c bioconda bowtie2 minimap2 kraken2 krona fastqc samtools bcftools git fastp python"
 else
-    if [[ $f != "" ]]; then 
+    echo "updating env"
+    if [[ $f != "nothing" ]]; then 
         conda env remove -y -n omics_workshop
         eval "$machine conda create -y -c bioconda -n omics_workshop bowtie2 minimap2 kraken2 krona fastqc samtools bcftools git fastp python"
     fi 
 fi
-
 
 
 conda activate omics_workshop
@@ -71,7 +73,7 @@ if [[ $machine -eq "CONDA_SUBDIR=osx-64" ]]; then
         python -c "import platform;print(platform.machine())" && \
         conda config --env --set subdir osx-64
 fi
-if [[ $f != "" ]]; then 
+if [[ $f != "nothing" ]]; then 
     if [ -d ~/omics_workshop ]; then
         echo "Removing existing 'omics_workshop' directory..."
         rm -rf ~/omics_workshop
@@ -89,7 +91,7 @@ fi
 ## make sure we update Taxonomy for krona to work! Requires internet
 echo "Downloading taxonomy information. Requires internet connection. This will take some time...."
 # bash ktUpdateTaxonomy.sh
-if [ -s $(dirname $(which ktImportTaxonomy))/../opt/krona/taxonomy/taxonomy.tab ] && [[ $f == "" ]]; then
+if [ -s $(dirname $(which ktImportTaxonomy))/../opt/krona/taxonomy/taxonomy.tab ] && [[ $f == "nothing" ]]; then
     echo "Krona taxonomy.tab exists, skipping...."
 else
     mkdir -p  ~/omics_workshop/downloads/ && conda activate omics_workshop \
@@ -99,7 +101,7 @@ else
         mv ~/omics_workshop/downloads/taxonomy.tab $(dirname $(which ktImportTaxonomy))/../opt/krona/taxonomy/
 fi
 # check if ~/omics_workshop/databases/k2_viral/hash.k2d and is size >0 then skip else download
-if [ -s ~/omics_workshop/databases/k2_viral/hash.k2d ] && [[ $f == "" ]]; then
+if [ -s ~/omics_workshop/databases/k2_viral/hash.k2d ] && [[ $f == "nothing" ]]; then
     echo "Kraken2 viral database already exists."
 else
     echo "Downloading Kraken2 viral database..."
