@@ -62,7 +62,6 @@ if  conda env list | grep -q 'omics_workshop' && [[ $f == "nothing" ]]; then
     eval "conda activate omics_workshop && $machine conda install -y -c bioconda bowtie2 minimap2 kraken2 krona fastqc samtools bcftools git fastp python"
 else
     echo "Creating new env"
-    conda env remove -n omics_workshop
     conda env remove -y -n omics_workshop
     eval "$machine conda create -y -c bioconda -n omics_workshop bowtie2 minimap2 kraken2 krona fastqc samtools bcftools git fastp python"
 fi
