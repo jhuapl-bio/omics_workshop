@@ -13,7 +13,7 @@ alignment
 metagenomics
 databases/test_metagenome
 
-
+!alignments/miseq.bam
 
 ### JupyterNotebooks ###
 # gitignore template for Jupyter Notebooks
