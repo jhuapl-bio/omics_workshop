@@ -49,7 +49,6 @@ source $HOME/miniconda3/etc/profile.d/conda.sh
 
 
 
-
 if [[ $f != "nothing" ]]; then
     rm -r ~/miniconda3
 fi
@@ -97,9 +96,9 @@ if ! command -v conda; then
     conda_base=$HOME/miniconda3
 else
     echo "Conda is already installed."
-    
-
 fi
+
+
 conda_base=$(conda info --base) 
 source $conda_base/etc/profile.d/conda.sh
 
@@ -107,38 +106,15 @@ if ! command -v conda; then
     echo "Conda not found. Please install Miniconda and rerun this script."
     exit 1
 fi
-# # Wait for the user to close and reopen their shell or source their bashrc
-# echo "Please close and reopen your terminal, or run 'source ~/.bashrc', then rerun this script."
-
-# Check if the omics_workshop environment exists
-
-if  conda env list | grep -q 'omics_workshop' && [[ $f == "nothing" ]]; then
-    echo "Env found, updating omics_workshop environment..."
-    # 
-    eval "conda activate omics_workshop && $machine conda install -y -c bioconda bowtie2 minimap2 kraken2 krona fastqc samtools bcftools git fastp python"
-else
-    echo "Creating new env"
-    conda env remove -y -n omics_workshop
-    eval "$machine conda create -y -c bioconda -n omics_workshop bowtie2 minimap2 kraken2 krona fastqc samtools bcftools git fastp python"
-fi
-
-eval "$machine conda install  -y git"
-
-conda activate omics_workshop
-
 
 # check if git is a command and if not then exit
 if ! command -v git; then
-    echo "Git not found. Please install Git and rerun this script."
-    exit 1
+    conda install -y git
+    if ! command -v git; then
+        echo "Git not found. Please install Git and rerun this script."
+        exit 1
+    fi 
 fi
-
-if [[ $machine -eq "CONDA_SUBDIR=osx-64" ]] || $machine -eq "CONDA_SUBDIR=linux-64"; then    
-    conda activate omics_workshop && \
-        python -c "import platform;print(platform.machine())" && \
-        conda config --env --set subdir $CONDA_SUBDIR
-fi
-
 
 
 # Check if ~/omics_workshop exists and if it does then cd and git pull force changes otherwise clone new one
@@ -157,6 +133,7 @@ if [ -d "$TARGET_DIR/.git" ] || [[ $f != "nothing" ]]; then
             exit 1
         }
     }
+    
 else
     # If not a valid Git repository, remove directory and clone fresh
     echo "Directory does not exist as a Git repository. Cloning afresh..."
@@ -166,16 +143,53 @@ else
         exit 1
     }
 fi
+if [ ! -d "$TARGET_DIR/kraken2" ]; then
+    rm -rf "$TARGET_DIR"
+    git clone "$REPO_URL" "$TARGET_DIR" || {
+        echo "Failed to clone repository."
+        exit 1
+    }
+fi 
 
-# 
 
-# if [ -d ~/omics_workshop ]; then
-#     echo "Updating 'omics_workshop' GitHub repository..."
-#     cd ~/omics_workshop && git pull
-# else
-#     echo "Cloning 'omics_workshop' GitHub repository..."
-#     git clone https://github.com/jhuapl-bio/omics_workshop ~/omics_workshop
-# fi
+# Environment and YAML configuration
+ENV_NAME="omics_workshop"
+ENV_YAML="~/omics_workshop/env.yml"
+
+if [[ $f != "nothing" ]]; then
+    conda env remove -y -n $ENV_NAME
+fi
+
+# Check if the environment exists
+if conda env list | grep -q "^$ENV_NAME\s"; then
+    echo "Environment '$ENV_NAME' exists, updating it..."
+    eval "$machine conda env update -n $ENV_NAME -f $ENV_YAML"
+    if [ $? -ne 0 ]; then
+        echo "Failed to update the environment."
+        exit 1
+    else
+        echo "Environment updated successfully."
+    fi
+else
+    echo "Environment '$ENV_NAME' does not exist, creating it..."
+    eval "$machine conda env create -f $ENV_YAML"
+    if [ $? -ne 0 ]; then
+        echo "Failed to create the environment."
+        exit 1
+    else
+        echo "Environment created successfully."
+    fi
+fi
+
+conda activate omics_workshop
+
+if [[ $machine == "CONDA_SUBDIR=osx-64" ]] || [[ $machine -eq "CONDA_SUBDIR=linux-64" ]]; then   
+    echo "setting osx64"
+    conda activate omics_workshop && \
+        python -c "import platform;print(platform.machine())" && \
+        conda config --env --set subdir $CONDA_SUBDIR
+fi
+
 
 ## make sure we update Taxonomy for krona to work! Requires internet
 echo "Downloading taxonomy information. Requires internet connection. This will take some time...."
@@ -190,7 +204,6 @@ else
         mv ~/omics_workshop/downloads/taxonomy.tab $(dirname $(which ktImportTaxonomy))/../opt/krona/taxonomy/
 fi
 
-
 tar  -xvzf ~/omics_workshop/databases/test_metagenome.tar.gz -C ~/omics_workshop/databases/
 
 
@@ -200,6 +213,7 @@ gzip -f -d --keep ~/omics_workshop/references/test.fasta.gz
 if [ -s ~/omics_workshop/databases/k2_viral/hash.k2d ] && [[ $f == "nothing" ]]; then
     echo "Kraken2 viral database already exists."
 else
+    mkdir -p ~/omics_workshop/downloads
     echo "Downloading Kraken2 viral database..."
     wget https://genome-idx.s3.amazonaws.com/kraken/k2_viral_20240112.tar.gz \
         -O ~/omics_workshop/downloads/k2_viral.tar.gz && \
