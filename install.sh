@@ -66,7 +66,7 @@ else
     eval "$machine conda create -y -c bioconda -n omics_workshop bowtie2 minimap2 kraken2 krona fastqc samtools bcftools git fastp python"
 fi
 
-apt-get install -y git 
+sudo apt-get install -y git 
 
 conda activate omics_workshop
 
