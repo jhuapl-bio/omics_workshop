@@ -102,6 +102,13 @@ else
         && gzip -f -d ~/omics_workshop/downloads/taxonomy.tab.gz  && \
         mv ~/omics_workshop/downloads/taxonomy.tab $(dirname $(which ktImportTaxonomy))/../opt/krona/taxonomy/
 fi
+
+
+tar  -xvzf ~/omics_workshop/databases/test_metagenome.tar.gz -C ~/omics_workshop/databases/
+
+
+gzip -f -d --keep ~/omics_workshop/references/test.fasta.gz
+
 # check if ~/omics_workshop/databases/k2_viral/hash.k2d and is size >0 then skip else download
 if [ -s ~/omics_workshop/databases/k2_viral/hash.k2d ] && [[ $f == "nothing" ]]; then
     echo "Kraken2 viral database already exists."
@@ -113,11 +120,5 @@ else
         tar -xvzf ~/omics_workshop/downloads/k2_viral.tar.gz -C ~/omics_workshop/downloads/k2_viral  && \
         mv ~/omics_workshop/downloads/k2_viral ~/omics_workshop/databases/k2_viral
 fi
-
-tar  -xvzf ~/omics_workshop/databases/test_metagenome.tar.gz -C ~/omics_workshop/databases/
-
-
-gzip -f -d --keep ~/omics_workshop/references/test.fasta.gz
-
 
 echo "Setup complete."
