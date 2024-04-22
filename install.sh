@@ -65,6 +65,8 @@ else
     conda env remove -y -n omics_workshop
     eval "$machine conda create -y -c bioconda -n omics_workshop bowtie2 minimap2 kraken2 krona fastqc samtools bcftools git fastp python"
 fi
+echo $conda_base
+source $conda_base/etc/profile.d/conda.sh
 
 
 conda activate omics_workshop
