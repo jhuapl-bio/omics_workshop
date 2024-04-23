@@ -35,10 +35,15 @@ case "${unameOut}" in
     *)          machine=""; OS="Linux";;
 esac
 
-if [[ $ARCH == "aarch64" ]]; then 
+if [[ $ARCH == "aarch64" ]] && [[ $OS == "Linux" ]]; then 
     machine="CONDA_SUBDIR=linux-64"
     CONDA_SUBDIR=linux-64
 fi
+if [[ $ARCH != "arm64" ]] && [[ $OS == "Darwin" ]]; then
+    machine=""
+    ARCH="amd64"
+    CONDA_SUBDIR=osx-64
+fi 
 
 
 echo Your Machine:${machine}, OS:${OS}  
@@ -65,7 +70,7 @@ if ! command -v conda; then
     elif [[ "$OS" == "Linux" && "$ARCH" == "aarch64" ]]; then
         echo "Downloading Miniconda for Linux aarch64..."
         wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-aarch64.sh -O ~/miniconda.sh
-    elif [[ "$OS" == "Darwin" && "$ARCH" == "x86_64" ]]; then
+    elif [[ "$OS" == "Darwin" && "$ARCH" == "x86_64" ]] || [[ "$OS" == "Darwin" && "$ARCH" == "amd64" ]]; then
         echo "Downloading Miniconda for macOS x86_64..."
         wget https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O ~/miniconda.sh
     elif [[ "$OS" == "Darwin" && "$ARCH" == "arm64" ]]; then
