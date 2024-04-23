@@ -15,7 +15,7 @@ databases/test_metagenome
 
 !alignment/miseq.bam
 !alignment/miseq.bam.bai
-
+aligment/miseq.histogram
 
 ### JupyterNotebooks ###
 # gitignore template for Jupyter Notebooks
