@@ -2,6 +2,8 @@
 
 Please follow the instructions outlined at the [Wiki](https://github.com/jhuapl-bio/omics_workshop/wiki) for each day where we perform hands-on activities
 
+Please click the link to this [survey](https://forms.gle/wavt4vFu1Rr24nNC8) to share your thoughts on the workshop and give feedback for the next time. 
+
 ## Updating at any point
 
 If you feel that any install did not complete successfully, you can rerun `install.sh` in the appropriate directory or through `wsl.bat` and type in `y` to prompt a full reinstall OR `n` (default) to just update or install if not installed yet. 
